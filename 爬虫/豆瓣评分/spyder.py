@@ -22,14 +22,20 @@ def getHtml(url):
         #读取网页
         html = response.read()
     except:
+        print '页面无法解析'
         return False
     return html
 
+def solve(s):
+   return s.get_text()
 
 
 def getData(baseurl):
     print u'******正在获取当前南京热映的电影*****'
     html = getHtml(baseurl)
+    if(html==False):
+        print '无法访问！'
+        return False
     soup = BeautifulSoup(html)
     nowplaying = soup.find_all('div', id = 'nowplaying')
     dataList = []
@@ -45,8 +51,13 @@ def getData(baseurl):
         data['name'] = movie['data-title']
         data['score'] = movie['data-score']
         comments = [];
-        for item in soup_comments.find_all('div' ,class_ ='comment'):
-            comments.append(item.find_all('p')[0].string)
+        for item in soup_comments.find_all('div', class_='comment'):
+            #print item.find_all('p', class_='')[0].string
+            if item.find_all('p', class_='')[0].string is None:
+                new = solve(item.find_all('p', class_='')[0])
+                comments.append(new)
+            else:
+                comments.append(item.find_all('p', class_='')[0].string)
         data['comments'] = comments
         dataList.append(data)
         print '电影名： '+data['name']+' 评分：'+ data['score']+' 点评数量：'+ str(len(data['comments']))
@@ -64,7 +75,6 @@ def saveData(datalist):
             sheet.write(num,0,item['name'])
             sheet.write(num,1,item['score'])
             sheet.write(num,2,item['comments'][i])
-            #print item['comments'][i]
             num+=1
     book.save(u'豆瓣南京在映影评.xls')
 
@@ -72,5 +82,8 @@ def saveData(datalist):
 def spyder():
     baseurl = 'https://movie.douban.com/cinema/nowplaying/nanjing/'
     datalist = getData(baseurl)
-    saveData(datalist)
+    if(datalist!=False):
+        saveData(datalist)
+
+
 spyder()
