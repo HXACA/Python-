@@ -15,26 +15,30 @@ import time
 import operator
 
 def main():
+    videoStr = 'v08.avi'
+    k = 5
     t1=time.clock()
     print u"视频读取中……"
-    readVideos.readVideos('v03.avi')
+    readVideos.readVideos(videoStr)
     t2=time.clock()
     print "readVideo's time:"+str(t2-t1)
     imgList = np.mat(loadImgae.load_img('images'))
     t3 = time.clock()
     print "loadImage's time:" + str(t3-t2)
     print u"关键帧提取中……"
-    myCentroids,clustAssing = Kmeans.biKmeans(imgList,int(np.shape(imgList)[0]/30)+1)
+    myCentroids,clustAssing = Kmeans.biKmeans(imgList,k)
+    #myCentroids, clustAssing = Kmeans.kMeans(imgList,k)
+    print np.sum(clustAssing[:,1])
     t4 = time.clock()
     print "Kmeans's time:" + str(t4 - t3)
     ans = []
-    for i in range(int(np.shape(imgList)[0]/30)+1):
+    for i in range(k):
         ptsInCurrCluster = np.nonzero(clustAssing[:,0].A==i)[0]
         ans.append(ptsInCurrCluster)
-    for i in range(len(ans)):
-        print ans[i]
+    # for i in range(k):
+    #     print ans[i]
     print u"摘要生成中……"
-    videoWriter.videoWriter(ans,'v03.avi',clustAssing)
+    videoWriter.videoWriter(ans,videoStr,clustAssing)
     t5 = time.clock()
     print "Video Write's time:" + str(t5 - t4)
     print "Total time:" + str(t5 - t1)

@@ -14,7 +14,7 @@ def delImg(imgDir='images'):
     imgs = os.listdir(imgDir)
     for i in range(len(imgs)):
         os.remove(imgDir+'/'+str(i)+'.jpg')
-
+@jit
 def readVideos(dir):
     delImg()
     vc = cv2.VideoCapture(dir)
@@ -23,7 +23,7 @@ def readVideos(dir):
         rval = True
     else:
         rval = False
-    timeF = 20
+    timeF = 50
     while rval:
         rval,frame = vc.read()
         if(c%timeF==0):

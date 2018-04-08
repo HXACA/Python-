@@ -6,6 +6,7 @@
 """
 import cv2
 import os
+from numba import jit
 
 def delVideo(Dir='abstractVideo/Video'):
     videos = os.listdir(Dir)
@@ -17,6 +18,7 @@ def delImg(imgDir='abstractVideo/Frame'):
     for i in range(len(imgs)):
         os.remove(imgDir+'/abstractFrame'+str(i+1)+'.jpg')
 
+@jit
 def videoWriter(ans,dir,bestCluster):
     delVideo()
     delImg()
@@ -25,19 +27,17 @@ def videoWriter(ans,dir,bestCluster):
     size = (int(vc.get(cv2.cv.CV_CAP_PROP_FRAME_WIDTH)),
             int(vc.get(cv2.cv.CV_CAP_PROP_FRAME_HEIGHT)))
     success,frame = vc.read()
-    vis = {}
     t=0
     now = 0
     videowriter = []
     for i in range(len(ans)):
         videowriter.append(cv2.VideoWriter("abstractVideo/Video/abstractVideo" + str(i+1) + '.avi', cv2.cv.CV_FOURCC('M', 'J', 'P', 'G'), fps, size))
     while success:
-        if (now+5)%20==0:
-            temp = bestCluster[(now+5)/20-1,0]
-            for i in range(10):
-                if success:
-                    videowriter[int(temp)].write(frame)
-                now+=1
+        if (now+10)%50==0 and (now+10)/50-1<len(bestCluster):
+            temp = bestCluster[(now+10)/50-1,0]
+            for i in range(20):
+                videowriter[int(temp)].write(frame)
+                now += 1
                 success, frame = vc.read()
         now+=1
         success, frame = vc.read()

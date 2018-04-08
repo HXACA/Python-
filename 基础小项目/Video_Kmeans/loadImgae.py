@@ -10,22 +10,10 @@ import cv2
 from sklearn.decomposition import PCA
 from PIL import Image
 
-def autoNorm(k):
-    k.reshape(1,np.shape(k)[0]*np.shape(k)[1])
-    m = k.shape[0]
-    minVal = k.min()
-    maxVal = k.max()
-    ranges = maxVal - minVal
-    nk = np.zeros(np.shape(k))
-    nk = k - np.tile(minVal,(m,1))
-    nk = k*1.0/np.tile(ranges,(m,1))
-    nk = Pca(nk)
-    #print nk
-    return nk
-
-
 def Pca(data):
-    c = min(np.shape(data)[0],np.shape(data)[1])
+    #print data
+    #data = data.reshape(1,-1)
+    c = 10
     pca = PCA(n_components=c)
     pca.fit(data)
     PCA(copy=True, n_components=c, whiten=False)
@@ -48,18 +36,16 @@ def load_img(imgDir):
     dataList = []
     for i in range(imgNum):
         img = cv2.imread(imgDir+'/'+str(i)+'.jpg')
-        img = cv2.resize(img, (np.shape(img)[0]/10, np.shape(img)[1]/10))
+        img = cv2.resize(img, (32, 32))
         HSV = cv2.cvtColor(img,cv2.COLOR_BGR2HSV)
-        gray = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
         H,S,V = cv2.split(HSV)
         data=[]
-        data.append(autoNorm(H))
-        data.append(autoNorm(S))
-        data.append(autoNorm(V))
-        data.append(autoNorm(gray))
-        data = np.array(data).reshape(np.shape(data)[0]*np.shape(data)[1])
+        data.extend(H/360.0)
+        data.extend(S/100.0)
+        data.extend(V/100.0)
+        #data = Pca(data)
+        data = np.array(data).reshape(-1)
         dataList.append(data)
-        #print np.shape(dataList)
     return dataList
 
 if __name__ == '__main__':
