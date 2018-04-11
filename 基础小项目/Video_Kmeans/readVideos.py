@@ -6,28 +6,28 @@
 """
 
 import cv2
-from numba import jit
 import os
-import shutil
+
 
 def delImg(imgDir='images'):
     imgs = os.listdir(imgDir)
-    for i in range(len(imgs)):
-        os.remove(imgDir+'/'+str(i)+'.jpg')
-@jit
+    for img in imgs:
+        imgPath = os.path.join(imgDir,img)
+        os.remove(imgPath)
+
 def readVideos(dir):
     delImg()
     vc = cv2.VideoCapture(dir)
-    c=1;
+    c=0;
     if vc.isOpened():
         rval = True
     else:
         rval = False
-    timeF = 50
+    timeF = 10
     while rval:
         rval,frame = vc.read()
-        if(c%timeF==0):
-            cv2.imwrite('images/'+str((c/timeF)-1)+'.jpg',frame)
+        if(c%timeF==0 and rval):
+            cv2.imwrite('images/'+str((c/timeF)).zfill(4)+'.jpg',frame)
         c = c+1
 
     vc.release()
