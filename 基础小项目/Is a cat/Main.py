@@ -202,7 +202,7 @@ def load_data():
     return np.array(train_y_orig),np.array(train_x_orig),np.array(test_x_orig),np.array(test_y_orig)
 
 
-def L_layer_model(X,Y,layer_dims,learning_rate = 0.002,num_iterations = 3000,print_cost = False):
+def L_layer_model(X,Y,layer_dims,learning_rate = 0.005,num_iterations = 5000,print_cost = False):
     np.random.seed(1)
     costs = []
     parameters = initialize_parameters(layer_dims)
@@ -233,7 +233,6 @@ def storeParmeters(parameters):
     with open('parameters.json','w') as json_file:
         json_file.write(json.dumps(parameters))
 
-
 def grabParameters():
     import json
     with open('parameters.json') as json_file:
@@ -252,7 +251,6 @@ def change(data,k):
             data['b' + str(i)] = np.array(data['b' + str(i)])
     return data
 
-
 def train():
     train_y_orig, train_x_orig, test_x_orig, test_y_orig = load_data()
     train_x_flatten = train_x_orig.reshape(train_x_orig.shape[0], -1).T
@@ -261,7 +259,7 @@ def train():
     train_y = train_y_orig.reshape(1, -1)
     train_x = train_x_flatten / 255.0
     test_x = test_x_flatten / 255.0
-    layers_dims = [train_x_flatten.shape[0], 20, 10, 5, 1]
+    layers_dims = [train_x_flatten.shape[0], 20,7,5,1]
     parameters = L_layer_model(train_x, train_y, layers_dims)
     storeParmeters(parameters)
     ans = predict(train_x,train_y)
@@ -274,11 +272,14 @@ def test():
         str = input(u'输入文件名及路径：')
         img = cv2.imread(str)
         img = cv2.resize(img, (64, 64))
+
+        img = img/255.0
         parameters = grabParameters()
         X = img.reshape(1,-1).T
         AL, caches = L_model_forward(X, parameters)
+        print(AL)
         print('Yes' if AL>0.5 else 'No')
 
 if __name__ == '__main__':
-    train()
+    test()
 

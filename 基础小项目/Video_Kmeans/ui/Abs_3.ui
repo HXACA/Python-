@@ -1,0 +1,962 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>831</width>
+    <height>830</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QWidget" name="widget" native="true">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>0</y>
+      <width>831</width>
+      <height>831</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: qconicalgradient(cx:0, cy:0, angle:135, stop:0 rgba(255, 255, 0, 69), stop:0.375 rgba(0, 158, 255, 255), stop:0.423533 rgba(0, 111, 255, 255), stop:0.45 rgba(0, 111, 255, 208), stop:0.477581 rgba(71, 151, 255, 206), stop:0.518717 rgba(71, 78, 255, 130), stop:0.55 rgba(37, 0, 255, 255), stop:0.57754 rgba(65, 0, 255, 215), stop:0.625 rgba(0, 9, 255, 69), stop:1 rgba(27, 0, 255, 206));
+border-radius:4px;</string>
+    </property>
+    <widget class="QWidget" name="widget_2" native="true">
+     <property name="geometry">
+      <rect>
+       <x>30</x>
+       <y>70</y>
+       <width>771</width>
+       <height>81</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">border-top:5px solid;
+border-color: rgb(32, 32, 32);
+border-bottom:5px solid;
+background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0.452736 rgba(201, 201, 201, 138));
+border-radius:0px;
+border-bottom-color: qlineargradient(spread:pad, x1:1, y1:1, x2:1, y2:0, stop:0.273632 rgba(0, 36, 125, 255), stop:1 rgba(211, 211, 211, 255));
+border-top-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0.273632 rgba(34, 0, 187, 255), stop:1 rgba(211, 211, 211, 255));</string>
+     </property>
+     <widget class="QPushButton" name="pushButton">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>30</y>
+        <width>121</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="cursor">
+       <cursorShape>PointingHandCursor</cursorShape>
+      </property>
+      <property name="mouseTracking">
+       <bool>false</bool>
+      </property>
+      <property name="focusPolicy">
+       <enum>Qt::StrongFocus</enum>
+      </property>
+      <property name="acceptDrops">
+       <bool>false</bool>
+      </property>
+      <property name="autoFillBackground">
+       <bool>false</bool>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton:hover{border:5px solid;border-color: rgb(0, 0, 222);background-color: rgb(211, 211, 211)}
+QPushButton:pressed{background-color: rgb(133, 133, 133);}
+QPushButton{
+border:3px solid;
+font: 75 9pt &quot;微软雅黑&quot;;
+color: rgb(117, 117, 117);
+background-color: rgb(233, 233, 233);
+border-radius:11px;
+border-color: rgb(19, 11, 255);}
+
+
+
+
+
+</string>
+      </property>
+      <property name="text">
+       <string>打开文件</string>
+      </property>
+      <property name="checkable">
+       <bool>false</bool>
+      </property>
+      <property name="checked">
+       <bool>false</bool>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="widget_3" native="true">
+     <property name="geometry">
+      <rect>
+       <x>30</x>
+       <y>170</y>
+       <width>341</width>
+       <height>391</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">border:3px solid;
+border-color: rgb(32, 32, 32);
+border-radius:4px;</string>
+     </property>
+     <widget class="QLabel" name="label">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>20</y>
+        <width>321</width>
+        <height>251</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: qlineargradient(spread:reflect, x1:0, y1:0, x2:0, y2:1, stop:0.0746269 rgba(169, 169, 169, 255), stop:0.263682 rgba(214, 214, 214, 255), stop:0.920398 rgba(176, 176, 176, 255));
+border:2px solid;
+border-color: rgb(66, 66, 66);
+border-bottom:0px;
+border-bottom-left-radius:0px;
+border-bottom-right-radius:0px;</string>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="pushButton_4">
+      <property name="geometry">
+       <rect>
+        <x>80</x>
+        <y>294</y>
+        <width>41</width>
+        <height>28</height>
+       </rect>
+      </property>
+      <property name="cursor">
+       <cursorShape>PointingHandCursor</cursorShape>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton:hover{background-color: rgb(90, 90, 90);}
+QPushButton:pressed{background-color:rgb(20, 20, 155);}
+QPushButton{
+border:0px solid;
+color: rgb(206, 206, 206);
+background-color: rgb(20, 29, 199);
+font: 75 9pt &quot;幼圆&quot;;}
+
+
+</string>
+      </property>
+      <property name="text">
+       <string>暂停</string>
+      </property>
+      <property name="iconSize">
+       <size>
+        <width>30</width>
+        <height>30</height>
+       </size>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="pushButton_5">
+      <property name="geometry">
+       <rect>
+        <x>130</x>
+        <y>294</y>
+        <width>41</width>
+        <height>28</height>
+       </rect>
+      </property>
+      <property name="cursor">
+       <cursorShape>PointingHandCursor</cursorShape>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton:hover{background-color: rgb(90, 90, 90);}
+QPushButton:pressed{background-color:rgb(20, 20, 155);}
+QPushButton{border:0px solid;
+color: rgb(206, 206, 206);
+background-color: rgb(20, 29, 199);
+font: 75 9pt &quot;幼圆&quot;;}
+</string>
+      </property>
+      <property name="text">
+       <string>继续</string>
+      </property>
+      <property name="iconSize">
+       <size>
+        <width>30</width>
+        <height>30</height>
+       </size>
+      </property>
+      <property name="shortcut">
+       <string>Ctrl+R</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_mes1">
+      <property name="geometry">
+       <rect>
+        <x>200</x>
+        <y>330</y>
+        <width>131</width>
+        <height>51</height>
+       </rect>
+      </property>
+      <property name="cursor">
+       <cursorShape>SizeAllCursor</cursorShape>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">font: 75 9pt &quot;Arial&quot;;
+color: rgb(97, 97, 97);
+background-color: rgb(230, 230, 230);
+border:2px solid;
+border-left:0px;
+border-top-left-radius:0px;
+border-bottom-left-radius:0px;</string>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+     </widget>
+     <widget class="QProgressBar" name="progressBar">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>271</y>
+        <width>321</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QProgressBar:chunk{background-color: qlineargradient(spread:repeat, x1:0, y1:0, x2:1, y2:0.006, stop:0.154229 rgba(142, 142, 142, 255), stop:0.681592 rgba(252, 252, 252, 255));
+border-bottom-right-radius:5px;
+border-top-right-radius:5px;}
+QProgressBar{
+background-color:rgb(150,150,150);
+border:2px solid;
+border-top:0px;
+border-color: rgb(66, 66, 66);
+border-top-left-radius:0px;
+border-top-right-radius:0px;
+}</string>
+      </property>
+      <property name="maximum">
+       <number>100</number>
+      </property>
+      <property name="value">
+       <number>0</number>
+      </property>
+      <property name="format">
+       <string/>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="pushButton_9">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>300</y>
+        <width>40</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="cursor">
+       <cursorShape>PointingHandCursor</cursorShape>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton:hover{background-color: qradialgradient(spread:pad, cx:0.5, cy:0.5, radius:0.5, fx:0.5, fy:0.5, stop:0 rgba(131, 149, 255, 255), stop:0.504819 rgba(255, 255, 255, 255), stop:0.731343 rgba(11, 0, 76, 255), stop:0.79 rgba(255, 255, 255, 255), stop:1 rgba(123, 86, 255, 255));}
+QPushButton:pressed{background-color: qradialgradient(spread:pad, cx:0.5, cy:0.5, radius:0.5, fx:0.5, fy:0.5, stop:0 rgba(119, 13, 255, 255), stop:0.504819 rgba(38, 16, 214, 255), stop:0.731343 rgba(14, 28, 147, 255), stop:0.79 rgba(247, 245, 255, 255), stop:1 rgba(123, 86, 255, 255));}
+QPushButton{background-color: qradialgradient(spread:pad, cx:0.5, cy:0.5, radius:0.5, fx:0.5, fy:0.5, stop:0.402985 rgba(255, 255, 255, 255), stop:0.626866 rgba(19, 10, 76, 255), stop:0.79 rgba(255, 255, 255, 255), stop:1 rgba(107, 117, 255, 255));
+border:0px;
+border-radius:16px;}</string>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="iconSize">
+       <size>
+        <width>40</width>
+        <height>35</height>
+       </size>
+      </property>
+     </widget>
+     <widget class="QWidget" name="widget_7" native="true">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>360</y>
+        <width>111</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">border-left:0px;
+background-color: qlineargradient(spread:repeat, x1:0, y1:0, x2:1, y2:0.006, stop:0 rgba(0, 150, 255, 255), stop:1 rgba(0, 113, 255, 255));
+border-bottom:0px;
+border-radius:0px;
+font: 75 9pt &quot;微软雅黑&quot;;</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_mes1_2">
+      <property name="geometry">
+       <rect>
+        <x>120</x>
+        <y>330</y>
+        <width>81</width>
+        <height>51</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">font: 75 9pt &quot;Arial&quot;;
+font: 9pt &quot;微软雅黑&quot;;
+color: rgb(97, 97, 97);
+background-color: rgb(230, 230, 230);
+border:2px solid;
+border-right:0px;
+border-top-right-radius:0px;
+border-bottom-right-radius:0px;</string>
+      </property>
+      <property name="text">
+       <string>当前文件：
+总帧数：</string>
+      </property>
+      <property name="textFormat">
+       <enum>Qt::AutoText</enum>
+      </property>
+     </widget>
+     <zorder>label</zorder>
+     <zorder>label_mes1</zorder>
+     <zorder>pushButton_4</zorder>
+     <zorder>pushButton_5</zorder>
+     <zorder>pushButton_9</zorder>
+     <zorder>widget_7</zorder>
+     <zorder>progressBar</zorder>
+     <zorder>label_mes1_2</zorder>
+    </widget>
+    <widget class="QWidget" name="widget_4" native="true">
+     <property name="geometry">
+      <rect>
+       <x>390</x>
+       <y>160</y>
+       <width>411</width>
+       <height>401</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">border:3px solid;
+border-color: rgb(32, 32, 32);
+border-radius:4px;</string>
+     </property>
+     <widget class="QWidget" name="widget_6" native="true">
+      <property name="geometry">
+       <rect>
+        <x>5</x>
+        <y>5</y>
+        <width>401</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">border:1px solid;
+background-color: rgb(52, 25, 255);
+border-color: rgb(32, 32, 32);</string>
+      </property>
+      <widget class="QPushButton" name="pushButton_10">
+       <property name="geometry">
+        <rect>
+         <x>290</x>
+         <y>7</y>
+         <width>91</width>
+         <height>28</height>
+        </rect>
+       </property>
+       <property name="cursor">
+        <cursorShape>PointingHandCursor</cursorShape>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton:hover{font: 11pt &quot;黑体&quot;;}
+QPushButton:pressed{color: rgb(111, 111, 111);}
+QPushButton{border:0px;
+border-left:2px solid;
+color: rgb(232, 232, 232);
+font: 9pt &quot;黑体&quot;;
+background-color: rgb(52, 25, 255);
+border-left-color: rgb(239, 239, 239);
+border-radius:0px;}</string>
+       </property>
+       <property name="text">
+        <string>清空摘要</string>
+       </property>
+      </widget>
+     </widget>
+     <widget class="QListWidget" name="listWidget_showImage">
+      <property name="geometry">
+       <rect>
+        <x>15</x>
+        <y>51</y>
+        <width>381</width>
+        <height>341</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: rgb(225, 225, 225);
+border-radius:5px;
+border:0px;</string>
+      </property>
+     </widget>
+     <widget class="QTabWidget" name="tabWidget_2">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>60</y>
+        <width>371</width>
+        <height>331</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: rgb(209, 209, 209);
+border:1px solid;
+font: 75 9pt &quot;微软雅黑&quot;;
+
+</string>
+      </property>
+      <property name="currentIndex">
+       <number>-1</number>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="widget_5" native="true">
+     <property name="geometry">
+      <rect>
+       <x>30</x>
+       <y>580</y>
+       <width>771</width>
+       <height>201</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">border:2px solid;
+background-color: rgb(189, 189, 189);
+border-color: rgb(32, 32, 32);</string>
+     </property>
+     <widget class="QListWidget" name="listWidget">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>10</y>
+        <width>151</width>
+        <height>181</height>
+       </rect>
+      </property>
+      <property name="cursor" stdset="0">
+       <cursorShape>ArrowCursor</cursorShape>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: rgb(230, 230, 230);
+color: rgb(84, 84, 84);
+font: 75 9pt &quot;Arial&quot;;</string>
+      </property>
+     </widget>
+     <widget class="QTabWidget" name="tabWidget">
+      <property name="geometry">
+       <rect>
+        <x>200</x>
+        <y>10</y>
+        <width>531</width>
+        <height>81</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QWidget{
+border:1px solid;
+border-color: rgb(108, 108, 108);
+border-radius:3px;
+background-color: rgb(250, 250, 250);}
+QWidget:pane{}
+QTabBar:tab{
+height:30px;
+width:100px;
+font: 75 9pt &quot;微软雅黑&quot;;
+background-color: rgb(189, 189, 189);
+}
+QTabBar:tab:selected{
+height:30px;
+width:100px;
+font: 75 9pt &quot;微软雅黑&quot;;
+color: rgb(52, 25, 255);
+background-color: rgb(250, 250, 250);
+}
+QTabBar:tab:hover{
+background-color: rgb(210, 210, 210);
+}
+</string>
+      </property>
+      <property name="currentIndex">
+       <number>0</number>
+      </property>
+      <property name="iconSize">
+       <size>
+        <width>20</width>
+        <height>20</height>
+       </size>
+      </property>
+      <property name="usesScrollButtons">
+       <bool>true</bool>
+      </property>
+      <widget class="QWidget" name="tab">
+       <attribute name="title">
+        <string>简单提取</string>
+       </attribute>
+       <widget class="QPushButton" name="pushButton_8">
+        <property name="geometry">
+         <rect>
+          <x>280</x>
+          <y>10</y>
+          <width>91</width>
+          <height>31</height>
+         </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">QPushButton:hover{border:2px solid;border-color: rgb(99, 99, 99);}
+QPushButton:pressed{background-color: rgb(99, 99, 99);}
+QPushButton{font: 75 9pt &quot;黑体&quot;;
+background-color: rgb(168, 168, 168);}</string>
+        </property>
+        <property name="text">
+         <string>文件夹检测</string>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="pushButton_16">
+        <property name="geometry">
+         <rect>
+          <x>380</x>
+          <y>10</y>
+          <width>71</width>
+          <height>31</height>
+         </rect>
+        </property>
+        <property name="cursor">
+         <cursorShape>PointingHandCursor</cursorShape>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">QPushButton:hover{border:2px solid;border-color: rgb(0, 43, 130);}
+QPushButton:pressed{background-color:rgb(111, 111, 111);}
+QPushButton{border:1px solid;
+color: rgb(122, 122, 122);
+font: 9pt &quot;黑体&quot;;
+background-color: rgb(211, 211, 211);
+border-color: rgb(0, 43, 130);}
+</string>
+        </property>
+        <property name="text">
+         <string>清空缓存</string>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="pushButton_7">
+        <property name="geometry">
+         <rect>
+          <x>460</x>
+          <y>10</y>
+          <width>51</width>
+          <height>31</height>
+         </rect>
+        </property>
+        <property name="cursor">
+         <cursorShape>PointingHandCursor</cursorShape>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">QPushButton:hover{border:2px solid;border-color: rgb(0, 20, 100);}
+QPushButton:pressed{background-color:rgb(211, 211, 211);}
+QPushButton{background-color: rgb(111, 111, 111);
+color: rgb(222, 222, 222);
+font: 75 9pt &quot;黑体&quot;;
+border-color: rgb(19, 11, 255);}
+</string>
+        </property>
+        <property name="text">
+         <string>运行</string>
+        </property>
+       </widget>
+      </widget>
+      <widget class="QWidget" name="tab_4">
+       <attribute name="title">
+        <string>精确提取</string>
+       </attribute>
+       <widget class="QLabel" name="label_4">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>10</y>
+          <width>71</width>
+          <height>31</height>
+         </rect>
+        </property>
+        <property name="cursor">
+         <cursorShape>BlankCursor</cursorShape>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">border:0px;
+font: 9pt &quot;等线&quot;;
+</string>
+        </property>
+        <property name="text">
+         <string>摘要数量：</string>
+        </property>
+       </widget>
+       <widget class="QTextEdit" name="textEdit_arg1">
+        <property name="geometry">
+         <rect>
+          <x>90</x>
+          <y>10</y>
+          <width>51</width>
+          <height>31</height>
+         </rect>
+        </property>
+        <property name="cursor" stdset="0">
+         <cursorShape>IBeamCursor</cursorShape>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">background-color: rgb(213, 213, 213);</string>
+        </property>
+        <property name="html">
+         <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'SimSun'; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;6&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="pushButton_13">
+        <property name="geometry">
+         <rect>
+          <x>340</x>
+          <y>10</y>
+          <width>81</width>
+          <height>31</height>
+         </rect>
+        </property>
+        <property name="cursor">
+         <cursorShape>PointingHandCursor</cursorShape>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">QPushButton:hover{border:2px solid;border-color: rgb(3, 3, 3);}
+QPushButton:pressed{background-color:rgb(111, 111, 111);}
+QPushButton{border:1px solid;
+border-radius:9px;
+color: rgb(122, 122, 122);
+font: 9pt &quot;黑体&quot;;
+background-color: rgb(211, 211, 211);
+border-color: rgb(3, 3, 3);}
+</string>
+        </property>
+        <property name="text">
+         <string>显示摘要</string>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="pushButton_14">
+        <property name="geometry">
+         <rect>
+          <x>430</x>
+          <y>10</y>
+          <width>81</width>
+          <height>31</height>
+         </rect>
+        </property>
+        <property name="cursor">
+         <cursorShape>PointingHandCursor</cursorShape>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">QPushButton:hover{border:2px solid;border-color:rgb(3, 3, 3);}
+QPushButton:pressed{background-color:rgb(111, 111, 111);}
+QPushButton{border:1px solid;
+border-radius:9px;
+color: rgb(122, 122, 122);
+font: 9pt &quot;黑体&quot;;
+background-color: rgb(211, 211, 211);
+border-color: rgb(255, 255, 255);}
+</string>
+        </property>
+        <property name="text">
+         <string>删除摘要</string>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="pushButton_6">
+        <property name="geometry">
+         <rect>
+          <x>280</x>
+          <y>10</y>
+          <width>51</width>
+          <height>31</height>
+         </rect>
+        </property>
+        <property name="cursor">
+         <cursorShape>PointingHandCursor</cursorShape>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">QPushButton:hover{border:2px solid;border-color: rgb(0, 20, 100);}
+QPushButton:pressed{background-color:rgb(211, 211, 211);}
+QPushButton{background-color: rgb(111, 111, 111);
+color: rgb(222, 222, 222);
+font: 75 9pt &quot;黑体&quot;;
+border-color: rgb(19, 11, 255);}
+</string>
+        </property>
+        <property name="text">
+         <string>运行</string>
+        </property>
+       </widget>
+       <zorder>label_4</zorder>
+       <zorder>pushButton_13</zorder>
+       <zorder>pushButton_14</zorder>
+       <zorder>pushButton_6</zorder>
+       <zorder>textEdit_arg1</zorder>
+      </widget>
+     </widget>
+     <widget class="QProgressBar" name="progressBar_2">
+      <property name="geometry">
+       <rect>
+        <x>510</x>
+        <y>175</y>
+        <width>221</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="cursor">
+       <cursorShape>ArrowCursor</cursorShape>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QProgressBar:chunk{background-color: qlineargradient(spread:repeat, x1:0, y1:0, x2:0.12, y2:0.006, stop:0.134328 rgba(255, 255, 255, 255), stop:0.502488 rgba(131, 131, 131, 255), stop:0.945274 rgba(243, 243, 243, 255));}
+QProgressBar{background-color: qlineargradient(spread:repeat, x1:0.06, y1:, x2:0.18, y2:0.006, stop:0.134328 rgba(255, 255, 255, 255), stop:0.502488 rgba(131, 131, 131, 255), stop:0.945274 rgba(243, 243, 243, 255));
+border-color: rgb(108, 108, 108);}
+
+
+
+</string>
+      </property>
+      <property name="value">
+       <number>100</number>
+      </property>
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+      <property name="format">
+       <string/>
+      </property>
+     </widget>
+     <widget class="QListWidget" name="listWidget_2">
+      <property name="geometry">
+       <rect>
+        <x>200</x>
+        <y>90</y>
+        <width>531</width>
+        <height>81</height>
+       </rect>
+      </property>
+      <property name="cursor" stdset="0">
+       <cursorShape>CrossCursor</cursorShape>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">border:2px solid;
+border-color: rgb(108, 108, 108);
+border-radius:3px;
+background-color: rgb(250, 250, 250);
+border-top:0px;
+color: rgb(84, 84, 84);
+font: 75 9pt &quot;Arial&quot;;</string>
+      </property>
+     </widget>
+     <widget class="QWidget" name="widget_9" native="true">
+      <property name="geometry">
+       <rect>
+        <x>200</x>
+        <y>90</y>
+        <width>531</width>
+        <height>18</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: qlineargradient(spread:repeat, x1:0, y1:0, x2:1, y2:0.006, stop:0 rgba(0, 55, 255, 29), stop:1 rgba(9, 0, 255, 43));
+border:0px;</string>
+      </property>
+      <zorder>widget_6</zorder>
+     </widget>
+    </widget>
+    <widget class="QPushButton" name="pushButton_2">
+     <property name="geometry">
+      <rect>
+       <x>670</x>
+       <y>-3</y>
+       <width>71</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="cursor">
+      <cursorShape>ClosedHandCursor</cursorShape>
+     </property>
+     <property name="layoutDirection">
+      <enum>Qt::LeftToRight</enum>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QPushButton:hover{background-color: rgb(50, 10, 205);}
+QPushButton{border:0px;
+font: 75 9pt &quot;黑体&quot;;
+color: rgb(229, 229, 229);
+border-right:2px solid;
+border-right-color: rgb(229, 229, 229);
+border-radius:0px;
+border-bottom-left-radius:15px;
+background-color: rgb(100, 50, 255);}
+</string>
+     </property>
+     <property name="text">
+      <string>最小化</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButton_3">
+     <property name="geometry">
+      <rect>
+       <x>740</x>
+       <y>-3</y>
+       <width>71</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="cursor">
+      <cursorShape>ClosedHandCursor</cursorShape>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QPushButton:hover{background-color:rgb(50, 10, 205);}
+QPushButton{border:0px;
+font: 75 9pt &quot;黑体&quot;;
+color: rgb(229, 229, 229);
+border-radius:0px;
+border-bottom-right-radius:15px;
+background-color: rgb(100, 50, 255);}</string>
+     </property>
+     <property name="text">
+      <string>关闭</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_2">
+     <property name="geometry">
+      <rect>
+       <x>50</x>
+       <y>160</y>
+       <width>71</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">font: 75 9pt &quot;黑体&quot;;
+color: rgb(222, 222, 222);
+background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(17, 120, 254, 255), stop:0.960199 rgba(53, 13, 255, 255));
+border-radius:5px;</string>
+     </property>
+     <property name="text">
+      <string>视频播放</string>
+     </property>
+     <property name="textFormat">
+      <enum>Qt::AutoText</enum>
+     </property>
+    </widget>
+    <widget class="QWidget" name="widget_8" native="true">
+     <property name="geometry">
+      <rect>
+       <x>30</x>
+       <y>547</y>
+       <width>81</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="cursor">
+      <cursorShape>CrossCursor</cursorShape>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">border:2px solid;
+background-color: rgb(189, 189, 189);
+border-color: rgb(32, 32, 32);
+font: 75 9pt &quot;微软雅黑&quot;;
+</string>
+     </property>
+     <widget class="QLabel" name="label_3">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>10</y>
+        <width>61</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="cursor">
+       <cursorShape>SizeAllCursor</cursorShape>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">border:0px;
+border-right-color: qlineargradient(spread:repeat, x1:0, y1:1, x2:1, y2:0, stop:0 rgba(0, 12, 57, 254), stop:1 rgba(9, 0, 255, 86));</string>
+      </property>
+      <property name="text">
+       <string>文件目录</string>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QPushButton" name="pushButton_11">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>10</y>
+       <width>321</width>
+       <height>51</height>
+      </rect>
+     </property>
+     <property name="cursor">
+      <cursorShape>SizeAllCursor</cursorShape>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QPushButton:hover{font: 75 16pt &quot;华文琥珀&quot;;color: rgb(0, 0, 155);}
+QPushButton{font: 75 15pt &quot;华文彩云&quot;;
+border：0px;
+color: rgb(0, 0, 56);
+background-color: qlineargradient(spread:repeat, x1:1, y1:0, x2:0, y2:0, stop:0 rgba(50, 66, 159, 0));}</string>
+     </property>
+     <property name="text">
+      <string>基于聚类的视频摘要系统</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_5">
+     <property name="geometry">
+      <rect>
+       <x>761</x>
+       <y>800</y>
+       <width>61</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="layoutDirection">
+      <enum>Qt::LeftToRight</enum>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">font: 9pt &quot;Copperplate Gothic Bold&quot;;
+background-color: qlineargradient(spread:repeat, x1:0, y1:1, x2:1, y2:0, stop:0 rgba(0, 50, 231, 76), stop:1 rgba(9, 0, 255, 86));</string>
+     </property>
+     <property name="text">
+      <string>andyix</string>
+     </property>
+     <property name="textFormat">
+      <enum>Qt::AutoText</enum>
+     </property>
+    </widget>
+   </widget>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

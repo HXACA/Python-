@@ -17,7 +17,9 @@ def delImg(imgDir='images'):
 
 def readVideos(dir):
     delImg()
+    print(dir)
     vc = cv2.VideoCapture(dir)
+    print(type(vc))
     c=0;
     if vc.isOpened():
         rval = True

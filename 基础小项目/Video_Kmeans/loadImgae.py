@@ -90,31 +90,46 @@ def getTexture(img):
     data.append(np.sum(imhist * np.log2(imhist + 0.0001)))
     return data
 
+def check(img):
+    pface = cv2.CascadeClassifier('C:\opencv\sources\data\haarcascades\haarcascade_profileface.xml')
+    fface = cv2.CascadeClassifier('C:\opencv\sources\data\haarcascades\haarcascade_frontalface_default.xml')
+    gray = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
+    faceRects = fface.detectMultiScale(gray, scaleFactor=1.2, minNeighbors=3, minSize=(32, 32))
+    if len(faceRects)>0:
+        return True
+    faceRects = pface.detectMultiScale(gray, scaleFactor=1.2, minNeighbors=3, minSize=(32, 32))
+    if len(faceRects)>0:
+        return True
+    gray = cv2.flip(gray,1)
+    faceRects = pface.detectMultiScale(gray, scaleFactor=1.2, minNeighbors=3, minSize=(32, 32))
+    if len(faceRects) > 0:
+        return True
+    return False
+
 def load_img(imgDir):
     imgs = os.listdir(imgDir)
     imgNum = len(imgs)
     print u"样本数量为："+str(imgNum)
     dataList = []
+    count = 0
     for Img in imgs:
         imgPath = os.path.join(imgDir,Img)
         img = cv2.imread(imgPath)
-        img = cv2.resize(img,(10,10))
         try:
             HSV = cv2.cvtColor(img,cv2.COLOR_BGR2HSV)
         except:
             print(str(imgPath))
         H,S,V = cv2.split(HSV)
-        #print S,S/255.0*100.0
         data = getHSV(H*2,S/255.0*100,V/255.0*100)
         data = data.tolist()
         #data.extend(getTexture(img))
         dataList.append(data)
-    dataList = np.array(dataList).reshape(imgNum,-1)
+        count +=1
+    dataList = np.array(dataList).reshape(count,-1)
     print(np.array(dataList).shape)
     dataList = Pca(dataList)
     return np.array(dataList)
 
 if __name__ == '__main__':
     data = load_img('images')
-    print(cosSimilarity(data[26],data[32]))
     print(np.array(data).shape)
