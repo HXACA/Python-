@@ -125,8 +125,10 @@ def surf():
     t1 = time.clock()
     global point,source
     img2 = source.copy()
-    img2_gray = cv2.imread("0002.jpg")
+    img2_gray = cv2.imread("EMS/0005.jpg")
     img2_gray = test.surf(source,img2_gray)
+    cv2.imshow('source2', img2_gray)
+    cv2.waitKey(0)
     pre = []
     for i in range(0,3):
         print(i)
