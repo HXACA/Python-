@@ -9,12 +9,12 @@ import cv2
 import numpy as np
 import math
 
-def surf(img1_gray,img2_gray):
+def surf(img1_gray=None,img2_gray=None):
 
-    # img1_gray = cv2.imread("source.jpg")
+    # img1_gray = cv2.imread("source2.jpg")
     # img2_gray = cv2.imread("0002.jpg")
 
-    h, w = img1_gray.shape[:2]
+    h, w = cv2.imread("source.jpg").shape[:2]
     suft = cv2.xfeatures2d.SURF_create()
     kp1, des1 = suft.detectAndCompute(img1_gray,None)
     kp2, des2 = suft.detectAndCompute(img2_gray, None)
@@ -28,20 +28,29 @@ def surf(img1_gray,img2_gray):
         if m.distance < 0.5 * n.distance:
             goodMatch.append(m)
 
+
+
     p1 = [kpp.queryIdx for kpp in goodMatch]
     p2 = [kpp.trainIdx for kpp in goodMatch]
 
     post1 = np.int32([kp1[pp].pt for pp in p1])
     post2 = np.int32([kp2[pp].pt for pp in p2])
 
-    tan1 = (post1[1][1] - post1[0][1]) / (post1[1][0] - post1[0][0])
-    tan1 = math.atan(tan1) * 180 / math.pi
-    print(tan1)
+    y1 = (post1[1][1] - post1[0][1])
+    x1 = (post1[1][0] - post1[0][0])
 
-    tan2 = (post2[1][1] - post2[0][1]) / (post2[1][0] - post2[0][0])
-    tan2 = math.atan(tan2) * 180 / math.pi
-    print(tan2)
-    img2_gray = rotate_bound_white_bg(img2_gray, tan1 - tan2)
+    y2 = (post2[1][1] - post2[0][1])
+    x2 =  (post2[1][0] - post2[0][0])
+
+    cos1 = (x1*x2+y1*y2)/(np.sqrt(x1*x1+y1*y1)*np.sqrt(x2*x2+y2*y2))
+    cos1 = math.acos(cos1)*180/math.pi
+    print(cos1)
+    #drawline(img1_gray, kp1, img2_gray, kp2, goodMatch,post1,post2)
+    temp = x1*y2-x2*y1
+    if temp>=0:
+        img2_gray = rotate_bound_white_bg(img2_gray, 360-cos1)
+    else:
+        img2_gray = rotate_bound_white_bg(img2_gray, cos1)
     kp2, des2 = suft.detectAndCompute(img2_gray, None)
     matches = bf.knnMatch(des1, des2, k=2)
 
@@ -55,7 +64,7 @@ def surf(img1_gray,img2_gray):
 def drawMatchesKnn_cv2(img1_gray, kp1, img2_gray, kp2, goodMatch):
     h1, w1 = img1_gray.shape[:2]
     h2, w2 = img2_gray.shape[:2]
-
+    h, w = cv2.imread("source.jpg").shape[:2]
     vis = np.zeros((max(h1, h2), w1 + w2, 3), np.uint8)
     vis[:h1, :w1] = img1_gray
     vis[:h2, w1:w1 + w2] = img2_gray
@@ -71,9 +80,30 @@ def drawMatchesKnn_cv2(img1_gray, kp1, img2_gray, kp2, goodMatch):
     y1 = int(np.sum(post1[:, 1]) / len(post1))
     y2 = int(np.sum(post2[:, 1]) / len(post2))
 
-    img = img2_gray[max(y2-y1-50,0):min(y2-y1+h1+50,h2),max(x2-x1-50,0):min(x2-x1+w1+50,w2)]
+    img = img2_gray[max(y2-y1-50,0):min(y2-y1+h+50,h2),max(x2-x1-50,0):min(x2-x1+w+50,w2)]
+    # cv2.imshow("match2", img)
+    # cv2.waitKey()
     return img
 
+def drawline(img1_gray, kp1, img2_gray, kp2, goodMatch,post1,post2):
+    h1, w1 = img1_gray.shape[:2]
+    h2, w2 = img2_gray.shape[:2]
+
+    vis = np.zeros((max(h1, h2), w1 + w2, 3), np.uint8)
+    vis[:h1, :w1] = img1_gray
+    vis[:h2, w1:w1 + w2] = img2_gray
+
+    count = 0
+    for (x1, y1), (x2, y2) in zip(post1, post2):
+        if count>1:
+            break
+        print(x1,y1)
+        print(x2, y2)
+        cv2.line(vis, (x1, y1), (x2+w1, y2), (count*255, 0, 255*(1-count)))
+        count+=1
+    cv2.namedWindow("match")
+    cv2.imshow("match", vis)
+    cv2.waitKey()
 
 def rotate_bound_white_bg(image, angle):
     # grab the dimensions of the image and then determine the
@@ -102,10 +132,6 @@ def rotate_bound_white_bg(image, angle):
     return cv2.warpAffine(image, M, (nW, nH), borderValue=(255, 255, 255))
     # borderValue 缺省，默认是黑色（0, 0 , 0）
     # return cv2.warpAffine(image, M, (nW, nH))
-
-
-
-
 
 
 if __name__ == '__main__':
