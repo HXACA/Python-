@@ -4,30 +4,36 @@
 @file: test.py 
 @time: 2018/07/05 
 """
-
+import sys
+sys.setrecursionlimit(10000)  # set the maximum depth as 10000
 import cv2
 import numpy as np
 import math
+import time
+import matplotlib.pyplot as plt
+import os
+
 
 def surf(img1_gray=None,img2_gray=None):
+    time1 = time.clock()
+    #img1_gray = cv2.cvtColor(cv2.imread("source4.jpg"),cv2.COLOR_RGB2GRAY)
 
-    # img1_gray = cv2.imread("source2.jpg")
-    # img2_gray = cv2.imread("0002.jpg")
+    img2 = cv2.imread("test.jpg")
+    img2_gray = cv2.cvtColor(img2,cv2.COLOR_RGB2GRAY)
 
-    h, w = cv2.imread("source.jpg").shape[:2]
+    t1 = time.clock()
     suft = cv2.xfeatures2d.SURF_create()
     kp1, des1 = suft.detectAndCompute(img1_gray,None)
     kp2, des2 = suft.detectAndCompute(img2_gray, None)
-
     # BFmatcher with default parms
     bf = cv2.BFMatcher(cv2.NORM_L2)
     matches = bf.knnMatch(des1, des2, k=2)
+    print("第一次检测：" + str(time.clock() - t1))
 
     goodMatch = []
     for m, n in matches:
         if m.distance < 0.5 * n.distance:
             goodMatch.append(m)
-
 
 
     p1 = [kpp.queryIdx for kpp in goodMatch]
@@ -36,51 +42,101 @@ def surf(img1_gray=None,img2_gray=None):
     post1 = np.int32([kp1[pp].pt for pp in p1])
     post2 = np.int32([kp2[pp].pt for pp in p2])
 
-    y1 = (post1[1][1] - post1[0][1])
-    x1 = (post1[1][0] - post1[0][0])
+    g1 = np.zeros((len(post1),len(post1)))
+    g2 = np.zeros((len(post1), len(post1)))
+    for i in range(len(post1)):
+        for j in range(i,len(post1)):
+            if i==j:
+                continue
+            x1,y1 = post1[i,:]
+            x2,y2 = post1[j,:]
+            g1[i,j] = g1[j,i] = np.sqrt(np.square(x2-x1)+np.square(y2-y1))
 
-    y2 = (post2[1][1] - post2[0][1])
-    x2 =  (post2[1][0] - post2[0][0])
+    for i in range(len(post2)):
+        for j in range(i,len(post2)):
+            if i==j:
+                g2[i, j] = 0x3f3f3f3f
+                continue
+            x1,y1 = post2[i,:]
+            x2,y2 = post2[j,:]
+            g2[i,j] = g2[j,i] = np.sqrt(np.square(x2-x1)+np.square(y2-y1))
 
-    cos1 = (x1*x2+y1*y2)/(np.sqrt(x1*x1+y1*y1)*np.sqrt(x2*x2+y2*y2))
-    cos1 = math.acos(cos1)*180/math.pi
-    print(cos1)
+    g = np.abs(g2-g1)
+    a,b= np.argwhere(g == np.min(g))[0]
+    print(a,b)
+    print(np.argwhere(g == np.min(g)))
+    print("g:"+str(g[a,b]))
+    print("g:" + str(g[0, 1]))
+    y1 = (post1[a][1] - post1[b][1])
+    x1 = (post1[a][0] - post1[b][0])
+
+    y2 = (post2[a][1] - post2[b][1])
+    x2 =  (post2[a][0] - post2[b][0])
+    cos1 = min((x1*x2+y1*y2)/(np.sqrt(x1*x1+y1*y1)*np.sqrt(x2*x2+y2*y2)),1.0)
+    cos1 = max(-1.0,cos1)
+    cos1 = math.acos(cos1)*180.0/math.pi
     #drawline(img1_gray, kp1, img2_gray, kp2, goodMatch,post1,post2)
     temp = x1*y2-x2*y1
     if temp>=0:
-        img2_gray = rotate_bound_white_bg(img2_gray, 360-cos1)
+        img2_gray,M= rotate_bound_white_bg(img2_gray, 360-cos1)
     else:
-        img2_gray = rotate_bound_white_bg(img2_gray, cos1)
-    kp2, des2 = suft.detectAndCompute(img2_gray, None)
-    matches = bf.knnMatch(des1, des2, k=2)
+        img2_gray,M= rotate_bound_white_bg(img2_gray, cos1)
+    print(len(post2))
+    t1 = time.clock()
+    for i in range(len(post2)):
+        post2[i, :] = np.dot(M[0:2, 0:2], post2[i, :]) + M[:, 2]
+    print("计算操作总："+str(time.clock()-t1))
+    print(post2[1, :])
+    t1 = time.clock()
+    # #精确裁剪
+    # kp2, des2 = suft.detectAndCompute(img2_gray, None)
+    # matches = bf.knnMatch(des1, des2, k=2)
+    # goodMatch = []
+    # for m, n in matches:
+    #     if m.distance < 0.5 * n.distance:
+    #         goodMatch.append(m)
 
-    goodMatch = []
-    for m, n in matches:
-        if m.distance < 0.5 * n.distance:
-            goodMatch.append(m)
+    img2_gray = drawMatchesKnn_cv2(img1_gray, kp1, img2_gray, kp2, goodMatch[:20],post1,post2)
+    print("总时长： "+str(time.clock()-time1))
+    # cv2.imshow("test",img2_gray)
+    # cv2.waitKey()
+    return img2_gray
 
-    return drawMatchesKnn_cv2(img1_gray, kp1, img2_gray, kp2, goodMatch[:20])
-
-def drawMatchesKnn_cv2(img1_gray, kp1, img2_gray, kp2, goodMatch):
-    h1, w1 = img1_gray.shape[:2]
+def drawMatchesKnn_cv2(img1_gray, kp1, img2_gray, kp2, goodMatch,post1,post2):
+    h, w = img1_gray.shape[:2]
     h2, w2 = img2_gray.shape[:2]
-    h, w = cv2.imread("source.jpg").shape[:2]
-    vis = np.zeros((max(h1, h2), w1 + w2, 3), np.uint8)
-    vis[:h1, :w1] = img1_gray
-    vis[:h2, w1:w1 + w2] = img2_gray
+    #
+    # p1 = [kpp.queryIdx for kpp in goodMatch]
+    # p2 = [kpp.trainIdx for kpp in goodMatch]
+    #
+    # post1 = np.int32([kp1[pp].pt for pp in p1])
+    # post2 = np.int32([kp2[pp].pt for pp in p2])
+    # print(post2)
+    g1 = np.zeros((len(post1), len(post1)))
+    g2 = np.zeros((len(post1), len(post1)))
+    for i in range(len(post1)):
+        for j in range(i, len(post1)):
+            if i == j:
+                continue
+            x1, y1 = post1[i, :]
+            x2, y2 = post1[j, :]
+            g1[i, j] = g1[j, i] = np.sqrt(np.square(x2 - x1) + np.square(y2 - y1))
 
-    p1 = [kpp.queryIdx for kpp in goodMatch]
-    p2 = [kpp.trainIdx for kpp in goodMatch]
+    for i in range(len(post1)):
+        for j in range(i, len(post1)):
+            if i == j:
+                g2[i, j] = 0x3f3f3f3f
+                continue
+            x1, y1 = post2[i, :]
+            x2, y2 = post2[j, :]
+            g2[i, j] = g2[j, i] = np.sqrt(np.square(x2 - x1) + np.square(y2 - y1))
 
-    post1 = np.int32([kp1[pp].pt for pp in p1])
-    post2 = np.int32([kp2[pp].pt for pp in p2])
-
-    x1 = int(np.sum(post1[:,0])/len(post1))
-    x2 = int(np.sum(post2[:,0])/len(post2))
-    y1 = int(np.sum(post1[:, 1]) / len(post1))
-    y2 = int(np.sum(post2[:, 1]) / len(post2))
-
-    img = img2_gray[max(y2-y1-50,0):min(y2-y1+h+50,h2),max(x2-x1-50,0):min(x2-x1+w+50,w2)]
+    g = np.abs(g2 - g1)
+    #print(np.argwhere(g == np.min(g)))
+    a, b = np.argwhere(g == np.min(g))[0]
+    x1,y1 = post1[a,:]
+    x2,y2 = post2[a,:]
+    img = img2_gray[max(y2-y1-25,0):min(y2-y1+h+25,h2),max(x2-x1-25,0):min(x2-x1+w+25,w2)]
     # cv2.imshow("match2", img)
     # cv2.waitKey()
     return img
@@ -89,18 +145,15 @@ def drawline(img1_gray, kp1, img2_gray, kp2, goodMatch,post1,post2):
     h1, w1 = img1_gray.shape[:2]
     h2, w2 = img2_gray.shape[:2]
 
-    vis = np.zeros((max(h1, h2), w1 + w2, 3), np.uint8)
+    vis = np.zeros((max(h1, h2), w1 + w2), np.uint8)
     vis[:h1, :w1] = img1_gray
     vis[:h2, w1:w1 + w2] = img2_gray
 
     count = 0
     for (x1, y1), (x2, y2) in zip(post1, post2):
-        if count>1:
-            break
         print(x1,y1)
         print(x2, y2)
         cv2.line(vis, (x1, y1), (x2+w1, y2), (count*255, 0, 255*(1-count)))
-        count+=1
     cv2.namedWindow("match")
     cv2.imshow("match", vis)
     cv2.waitKey()
@@ -116,6 +169,7 @@ def rotate_bound_white_bg(image, angle):
     # (i.e., the rotation components of the matrix)
     # -angle位置参数为角度参数负值表示顺时针旋转; 1.0位置参数scale是调整尺寸比例（图像缩放参数），建议0.75
     M = cv2.getRotationMatrix2D((cX, cY), -angle, 1.0)
+    print(M.shape)
     cos = np.abs(M[0, 0])
     sin = np.abs(M[0, 1])
 
@@ -129,10 +183,111 @@ def rotate_bound_white_bg(image, angle):
 
     # perform the actual rotation and return the image
     # borderValue 缺失背景填充色彩，此处为白色，可自定义
-    return cv2.warpAffine(image, M, (nW, nH), borderValue=(255, 255, 255))
+    return cv2.warpAffine(image, M, (nW, nH), borderValue=(255, 255, 255)),M
     # borderValue 缺省，默认是黑色（0, 0 , 0）
     # return cv2.warpAffine(image, M, (nW, nH))
 
+def sum(img=None):
+    # img = cv2.imread("EMS/0002.jpg")
+    # img = cv2.cvtColor(img,cv2.COLOR_RGB2GRAY)
+    h,w = img.shape
+    l = 0
+    r = w-1
+    u = 0
+    p = h-1
+    print(h,w)
+    # img[0:600,:]=0
+    # cv2.imwrite("test2.jpg", img)
+    sum = np.sum(img,axis=0)
+    for i in range(w):
+        if sum[i]>330000 :
+            l=i
+            break
+    for i in range(w-1,l+1,-1):
+        if sum[i]>330000:
+            r=i
+            break
+    print("------")
+    sum = np.sum(img, axis=1)
+    for i in range(h):
+        if (i>200 and sum[i] > 330000):
+            u = i
+            print(sum[i])
+            break
+    for i in range(h-1, u + 1, -1):
+        if (i<h-200 and sum[i] > 330000):
+            p = i
+            break
+    print(u,p)
+    img = img[u:p,l:r]
+    cv2.imwrite("test.jpg",img)
+    # cv2.namedWindow("match")
+    # cv2.imshow("match",img)
+    # cv2.waitKey()
+
+def test(gray=None):
+    #img = cv2.imread("EMS/0002.jpg")
+    #gray = cv2.cvtColor(img,cv2.COLOR_RGB2GRAY)
+    ret, thresh1 = cv2.threshold(gray, 127, 255, cv2.THRESH_BINARY)
+    cv2.imwrite("binary.jpg",thresh1)
+    h,w = gray.shape[:2]
+    sum = np.sum(thresh1,axis=0)
+    print(len(sum))
+    print(h,w)
+    l = []
+    sum = sum>51000
+    l = np.argwhere(sum==True)
+    print(len(l))
+    temp = np.zeros((h,len(l)))
+    for i in range(len(l)):
+        temp[:, i] = gray[:, l[i,0]]
+
+    l = []
+    sum = np.sum(thresh1, axis=1)
+    sum = sum > 51000
+    l = np.argwhere(sum == True)
+    new = np.zeros((len(l),temp.shape[1]))
+    for i in range(len(l)):
+        new[i] = temp[l[i]]
+    cv2.imwrite("test.jpg",new)
+
+def test2(gray=None):
+    imgDir = 'EMS/'
+    imgs = os.listdir(imgDir)
+    for Img in imgs:
+        t1 = time.clock()
+        imgPath = os.path.join(imgDir,Img)
+        img = cv2.imread(imgPath)
+        h,w = img.shape[:2]
+        img = img[500:h-600,:]
+        gray = cv2.cvtColor(img,cv2.COLOR_RGB2GRAY)
+        ret, thresh1 = cv2.threshold(gray, 127, 255, cv2.THRESH_BINARY)
+        cv2.imwrite("binary/binary+"+str(Img)+".jpg",thresh1)
+        h,w = gray.shape[:2]
+        sum = np.sum(thresh1,axis=0)
+        l = []
+        for i in range(w):
+            if sum[i]>25500 :
+                l.append(i)
+        temp = np.zeros((h,len(l)))
+        for i in range(len(l)):
+            temp[:, i] = gray[:, l[i]]
+
+        l = []
+        sum = np.sum(thresh1, axis=1)
+        for i in range(h):
+            if sum[i]>25500:
+                l.append(i)
+        new = np.zeros((len(l),temp.shape[1]))
+        for i in range(len(l)):
+            new[i] = temp[l[i]]
+        cv2.imwrite("test/test"+str(Img)+".jpg",new)
+        print(time.clock()-t1)
+
+def getdis(x1,y1,x2,y2):
+    return np.sqrt(np.square(x1-x2)+np.square(y1-y2))
+
+
 
 if __name__ == '__main__':
-    surf()
+    test2()
