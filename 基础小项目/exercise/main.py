@@ -128,7 +128,7 @@ def surf():
     # 模板图
     img = source.copy()
     #读入目标图
-    img2_gray = cv2.cvtColor(cv2.imread("EMS/0016.jpg"),cv2.COLOR_RGB2GRAY)
+    img2_gray = cv2.cvtColor(cv2.imread("EMS/0002.jpg"),cv2.COLOR_RGB2GRAY)
     #适当裁切
     test.test(img2_gray)
     #旋转至标准图
@@ -139,10 +139,10 @@ def surf():
     # cv2.waitKey()
     pre = []
     p = 0.0
+    psum = 0.0
     #三个标定框
+    tcount = 0
     for i in range(0,3):
-        #画出模板图的标定框
-        cv2.rectangle(img, (point[i][0], point[i][1]), (point[i][2], point[i][3]), (0, 0, 255), 5)
         #读入切割出的图
         img1_gray = cv2.cvtColor(cv2.imread("result/result"+str(i+1)+".jpg"),cv2.COLOR_RGB2GRAY)
         h, w = img1_gray.shape[:2]
@@ -157,57 +157,47 @@ def surf():
         bf = cv2.BFMatcher(cv2.NORM_L2)
         matches = bf.knnMatch(des1, des2, k=2)
 
+        a = -1
+        b = -1
+        minn = 0x3f3f3f3f
         goodMatch = []
+        count = 0
         for m, n in matches:
             if m.distance < 0.5 * n.distance:
                 goodMatch.append(m)
+                if m.distance < minn:
+                    b = a
+                    a = count
+                    minn = m.distance
+                count += 1
+
         #drawMatchesKnn_cv2(img1_gray, kp1, img2_gray, kp2, goodMatch[:20])
         p1 = [kpp.queryIdx for kpp in goodMatch]
         p2 = [kpp.trainIdx for kpp in goodMatch]
 
         post1 = np.int32([kp1[pp].pt for pp in p1])
         post2 = np.int32([kp2[pp].pt for pp in p2])
-
-        if len(post1)==0:
+        print("post1:"+str(len(post1)))
+        if len(post1)<=1:
             pre.append(pre[i-1])
             point[i]=point[i-1]
             continue
-        # dx = 0.0
-        # dy = 0.0
-        # for (x1, y1), (x2, y2) in zip(post1, post2):
-        #     dx += (x2 - x1)
-        #     dy += (y2 - y1)
-        # dx = (int)(dx / len(post1))
-        # dy = (int)(dy / len(post1))
-        g1 = np.zeros((len(post1), len(post1)))
-        g2 = np.zeros((len(post1), len(post1)))
-        for j in range(len(post1)):
-            for k in range(j, len(post1)):
-                if k == j:
-                    continue
-                x1, y1 = post1[j, :]
-                x2, y2 = post1[k, :]
-                g1[k, j] = g1[j, k] = np.sqrt(np.square(x2 - x1) + np.square(y2 - y1))
-        for j in range(len(post1)):
-            for k in range(j, len(post1)):
-                if j == k:
-                    g2[j, k] = 0x3f3f3f3f
-                    continue
-                x1, y1 = post2[j, :]
-                x2, y2 = post2[k, :]
-                g2[k, j] = g2[j, k] = np.sqrt(np.square(x2 - x1) + np.square(y2 - y1))
 
-        g = np.abs(g2 - g1)
-        a, b = np.argwhere(g == np.min(g))[0]
         dx = post2[a][0]-post1[a][0]
         dy = post2[a][1]-post1[a][1]
-        if g1[a,b]==0:
-            p = 1
-        else:
-            p = g2[a,b]/g1[a,b]
-        print(post1[a, :],post1[b, :])
-        print(g2[a,b],g1[a,b])
+        x1,y1 = post1[a]
+        x2,y2 = post1[b]
+        dis1 = np.sqrt(np.square(x1-x2)+np.square(y1-y2))
+        x1, y1 = post2[a]
+        x2, y2 = post2[b]
+        dis2 = np.sqrt(np.square(x1 - x2) + np.square(y1 - y2))
+        p = dis2/dis1
+        psum+=p
+        # 画出模板图的标定框
+        #print(dis2,dis1,p)
+        cv2.rectangle(img, (point[i][0], point[i][1]), (point[i][2], point[i][3]), (0, 0, 255), 5)
         cv2.rectangle(img2_gray, (dx, dy), (dx + int(w*p), dy + int(h*p)), (0, 0, 255), 5)
+        tcount+=1
         pre.append([dx, dy, dx + w, dy + h])
 
     cv2.rectangle(img, (point[3][0], point[3][1]), (point[3][2], point[3][3]), (255, 0, 0), 5)
@@ -225,6 +215,7 @@ def surf():
     a, b = np.argwhere(g == np.min(g))[0]
     rx = int(((pre[a][0]-point[a][0] + point[3][0])+(pre[b][0]-point[b][0] + point[3][0]))/2)
     ry = int(((pre[a][1]-point[a][1] + point[3][1])+(pre[b][1]-point[b][1] + point[3][1]))/2)
+    p = psum/tcount
     print(p)
     cv2.rectangle(img2_gray, (rx, ry), (rx + int((point[3][2] - point[3][0])*p), ry + int((point[3][3] - point[3][1])*p)), (255, 0, 0), 5)
     print(time.clock()-t1)

@@ -15,7 +15,7 @@ import os
 
 
 def surf(img1_gray=None,img2_gray=None):
-    time1 = time.clock()
+
     #img1_gray = cv2.cvtColor(cv2.imread("source4.jpg"),cv2.COLOR_RGB2GRAY)
 
     img2 = cv2.imread("test.jpg")
@@ -30,10 +30,20 @@ def surf(img1_gray=None,img2_gray=None):
     matches = bf.knnMatch(des1, des2, k=2)
     print("第一次检测：" + str(time.clock() - t1))
 
+    t1 = time.clock()
+    a = -1
+    b = -1
+    minn = 0x3f3f3f3f
     goodMatch = []
+    count = 0
     for m, n in matches:
         if m.distance < 0.5 * n.distance:
             goodMatch.append(m)
+            if m.distance<minn:
+                b = a
+                a = count
+                minn = m.distance
+            count+=1
 
 
     p1 = [kpp.queryIdx for kpp in goodMatch]
@@ -42,31 +52,6 @@ def surf(img1_gray=None,img2_gray=None):
     post1 = np.int32([kp1[pp].pt for pp in p1])
     post2 = np.int32([kp2[pp].pt for pp in p2])
 
-    g1 = np.zeros((len(post1),len(post1)))
-    g2 = np.zeros((len(post1), len(post1)))
-    for i in range(len(post1)):
-        for j in range(i,len(post1)):
-            if i==j:
-                continue
-            x1,y1 = post1[i,:]
-            x2,y2 = post1[j,:]
-            g1[i,j] = g1[j,i] = np.sqrt(np.square(x2-x1)+np.square(y2-y1))
-
-    for i in range(len(post2)):
-        for j in range(i,len(post2)):
-            if i==j:
-                g2[i, j] = 0x3f3f3f3f
-                continue
-            x1,y1 = post2[i,:]
-            x2,y2 = post2[j,:]
-            g2[i,j] = g2[j,i] = np.sqrt(np.square(x2-x1)+np.square(y2-y1))
-
-    g = np.abs(g2-g1)
-    a,b= np.argwhere(g == np.min(g))[0]
-    print(a,b)
-    print(np.argwhere(g == np.min(g)))
-    print("g:"+str(g[a,b]))
-    print("g:" + str(g[0, 1]))
     y1 = (post1[a][1] - post1[b][1])
     x1 = (post1[a][0] - post1[b][0])
 
@@ -81,23 +66,14 @@ def surf(img1_gray=None,img2_gray=None):
         img2_gray,M= rotate_bound_white_bg(img2_gray, 360-cos1)
     else:
         img2_gray,M= rotate_bound_white_bg(img2_gray, cos1)
-    print(len(post2))
-    t1 = time.clock()
+
+
     for i in range(len(post2)):
         post2[i, :] = np.dot(M[0:2, 0:2], post2[i, :]) + M[:, 2]
-    print("计算操作总："+str(time.clock()-t1))
-    print(post2[1, :])
+    print("旋转：" + str(time.clock() - t1))
     t1 = time.clock()
-    # #精确裁剪
-    # kp2, des2 = suft.detectAndCompute(img2_gray, None)
-    # matches = bf.knnMatch(des1, des2, k=2)
-    # goodMatch = []
-    # for m, n in matches:
-    #     if m.distance < 0.5 * n.distance:
-    #         goodMatch.append(m)
-
     img2_gray = drawMatchesKnn_cv2(img1_gray, kp1, img2_gray, kp2, goodMatch[:20],post1,post2)
-    print("总时长： "+str(time.clock()-time1))
+    print("精确裁切：" + str(time.clock() - t1))
     # cv2.imshow("test",img2_gray)
     # cv2.waitKey()
     return img2_gray
@@ -226,18 +202,23 @@ def sum(img=None):
     # cv2.waitKey()
 
 def test(gray=None):
-    #img = cv2.imread("EMS/0002.jpg")
-    #gray = cv2.cvtColor(img,cv2.COLOR_RGB2GRAY)
+    # img = cv2.imread("EMS/0016.jpg")
+    # cv2.namedWindow("source", cv2.WINDOW_NORMAL)
+    # cv2.imshow("source", img)
+    # gray = cv2.cvtColor(img,cv2.COLOR_RGB2GRAY)
+    # cv2.namedWindow("gray", cv2.WINDOW_NORMAL)
+    # cv2.imshow("gray", gray)
     ret, thresh1 = cv2.threshold(gray, 127, 255, cv2.THRESH_BINARY)
+    # cv2.namedWindow("binary", cv2.WINDOW_NORMAL)
+    # cv2.imshow("binary", thresh1)
     cv2.imwrite("binary.jpg",thresh1)
     h,w = gray.shape[:2]
     sum = np.sum(thresh1,axis=0)
-    print(len(sum))
-    print(h,w)
+
     l = []
     sum = sum>51000
     l = np.argwhere(sum==True)
-    print(len(l))
+
     temp = np.zeros((h,len(l)))
     for i in range(len(l)):
         temp[:, i] = gray[:, l[i,0]]
@@ -250,6 +231,9 @@ def test(gray=None):
     for i in range(len(l)):
         new[i] = temp[l[i]]
     cv2.imwrite("test.jpg",new)
+    # cv2.namedWindow("new", cv2.WINDOW_NORMAL)
+    # cv2.imshow("new", cv2.imread("test.jpg"))
+    # cv2.waitKey()
 
 def test2(gray=None):
     imgDir = 'EMS/'
@@ -259,7 +243,7 @@ def test2(gray=None):
         imgPath = os.path.join(imgDir,Img)
         img = cv2.imread(imgPath)
         h,w = img.shape[:2]
-        img = img[500:h-600,:]
+        img = img[600:h-600,:]
         gray = cv2.cvtColor(img,cv2.COLOR_RGB2GRAY)
         ret, thresh1 = cv2.threshold(gray, 127, 255, cv2.THRESH_BINARY)
         cv2.imwrite("binary/binary+"+str(Img)+".jpg",thresh1)
@@ -287,7 +271,22 @@ def test2(gray=None):
 def getdis(x1,y1,x2,y2):
     return np.sqrt(np.square(x1-x2)+np.square(y1-y2))
 
+def test3():
+    imgDir = 'EMS/'
+    imgs = os.listdir(imgDir)
+    img = cv2.imread('source/source.jpg')
+    for Img in imgs:
+        t1 = time.clock()
+        imgPath = os.path.join(imgDir, Img)
+        img2_gray = cv2.cvtColor(cv2.imread(imgPath), cv2.COLOR_RGB2GRAY)
+        # 适当裁切
+        test(img2_gray)
+        # 旋转至标准图
+        img2_gray = surf(cv2.cvtColor(img, cv2.COLOR_RGB2GRAY))
+        print(imgPath)
+        cv2.imwrite("change/"+str(Img),img2_gray)
+        print(time.clock() - t1)
 
 
 if __name__ == '__main__':
-    test2()
+    test3()
