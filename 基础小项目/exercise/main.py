@@ -9,7 +9,7 @@ import numpy as np
 global source, point1, point2,target,point
 import test
 import os
-
+import test2
 import matplotlib.pyplot as plt
 import time
 import threading
@@ -128,7 +128,7 @@ def surf():
     # 模板图
     img = source.copy()
     #读入目标图
-    img2_gray = cv2.cvtColor(cv2.imread("EMS/0002.jpg"),cv2.COLOR_RGB2GRAY)
+    img2_gray = cv2.cvtColor(cv2.imread("EMS/0001.jpg"),cv2.COLOR_RGB2GRAY)
     #适当裁切
     test.test(img2_gray)
     #旋转至标准图
@@ -218,8 +218,10 @@ def surf():
     p = psum/tcount
     print(p)
     cv2.rectangle(img2_gray, (rx, ry), (rx + int((point[3][2] - point[3][0])*p), ry + int((point[3][3] - point[3][1])*p)), (255, 0, 0), 5)
+    cv2.imwrite('result.jpg',img2_gray[ry:ry + int((point[3][3] - point[3][1])*p),rx:rx + int((point[3][2] - point[3][0])*p)])
     print(time.clock()-t1)
     showimg('result', img2_gray, img)
+    test2.work()
 
 def drawMatchesKnn_cv2(img1_gray, kp1, img2_gray, kp2, goodMatch):
     h1, w1 = img1_gray.shape[:2]
